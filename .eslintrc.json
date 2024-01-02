@@ -1,0 +1,75 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "jest": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended",
+      "plugin:jsx-a11y/recommended",
+      "prettier"
+    ],
+    "overrides": [
+      {
+        "files": ["*.tsx"],
+        "parserOptions": {
+          "ecmaFeatures": {
+            "jsx": true
+          }
+        },
+        "rules": {
+          "react/react-in-jsx-scope": "off"
+        }
+      }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": ["react", "@typescript-eslint", "jest"],
+    "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
+      "linebreak-style": "off",
+      "react/jsx-one-expression-per-line": "off",
+      "import/extensions": "off",
+      "import/no-unresolved": "off",
+      "object-curly-newline": "off",
+      "jest/valid-expect": "off",
+      "no-console": "warn",
+      "no-unused-vars": "off",
+      "import/prefer-default-export": "off",
+      "react/function-component-definition": "off",
+      "comma-dangle": "off",
+      "arrow-parens": "off",
+      "react/jsx-props-no-spreading": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "spaced-comment": "off",
+      "arrow-body-style": "off",
+      "react/jsx-boolean-value": "off",
+      "no-debugger": "warn",
+      "react/jsx-no-useless-fragment": "off",
+      "eslintno-unused-expressions": "off",
+      "implicit-arrow-linebreak": "off",
+      "max-len": "off",
+      "operator-linebreak": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "react/jsx-wrap-multilines": "off",
+      "no-param-reassign": "off",
+      "camelcase": "off",
+      "react/prop-types": "off", // Отключаем проверку типов для prop-types
+      "@typescript-eslint/explicit-module-boundary-types": "off", // Отключаем проверку типов для возвращаемых значений
+      "@typescript-eslint/no-inferrable-types": "off",
+      "no-dupe-else-if": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  
