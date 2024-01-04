@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { Stack, Typography } from '@mui/material';
-import { RadialBarChart, RadialBar, Legend, ResponsiveContainer, PolarAngleAxis } from 'recharts';
+import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
 import { ReactComponent as ArrowUpLogo } from '@/assets/icon/arrowUp.svg';
 import { useThemeFonts } from '@/hooks/useThemeFonts';
 import CustomSelect from '@/shared/ui/CustomSelect';

@@ -1,5 +1,3 @@
-import { useGetMoneyQuery } from '@/redux/ApplicationApi/ApplicationApi';
-import MainContainer from '@/shared/ui/MainContainer';
 import {
   XAxis,
   YAxis,

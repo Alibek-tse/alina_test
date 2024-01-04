@@ -1,38 +1,30 @@
 import { TextField, Stack, InputLabel } from '@mui/material';
 import styled from '@emotion/styled';
-import { ReactComponent as LogoSearch } from '@/assets/icon/searchIcon.svg';
 import { useThemeFonts } from '@/hooks/useThemeFonts';
+import { ReactComponent as TengeLogo } from '@/assets/icon/iconTenge.svg';
+import { useEffect, useState } from 'react';
 
-const StyledCustomTextField = styled(TextField)(() => {
-  return {
-    width: '100%',
-    '& .MuiInputBase-root': {
-      height: '40px',
-      borderRadius: '8px',
-      backgroundColor: 'white',
+const StyledCustomTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    height: '30px',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
+    position: 'relative',
+    bottom: '-1px',
+    fontSize: '16px',
+    lineHeight: '24px',
+    fontWeight: 400,
+    paddingLeft: '0',
+    paddingRight: '0',
+    '&.Mui-disabled': {
+      paddingRight: '0',
     },
-    '& .MuiInputBase-input': {
-      fontSize: '16px',
-      lineHeight: '24px',
-      letterSpacing: '0px',
-      fontWeight: 400,
-      paddingLeft: '16px',
-    },
-    '& .MuiInputBase-input.Mui-disabled': {
-      backgroundColor: '#ccc',
-      WebkitTextFillColor: 'black',
-      borderRadius: '8px',
-      padding: '13px',
-    },
-    '& .MuiInputBase-input::placeholder': {
-      fontSize: '12px',
-      lineHeight: '18px',
-      letterSpacing: '0px',
-      color: 'black', // Здесь укажите нужный цвет
-      // Добавьте другие стили для placeholder по вашему усмотрению
-    },
-  };
-});
+  },
+  '& .MuiInputBase-input::placeholder': {
+    fontSize: '16px',
+    lineHeight: '18px',
+    color: '#969696',
+  },
+}));
 
 type CustomTextFieldProps = {
   title?: string;
@@ -48,6 +40,7 @@ type CustomTextFieldProps = {
   isNumber?: boolean;
   maxLength?: number | null;
   isSearch?: boolean;
+  mask?: string;
 };
 
 export const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -60,31 +53,50 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
   disabled = false,
   showWarning = false,
   titleFontWeight = 400,
-  isSearch = false,
-  maxLength = null
+  maxLength = null,
+  isNumber = false,
 }) => {
-  const {bodyS} = useThemeFonts()
+  const { bodyM } = useThemeFonts();
+  const [inputValue, setInputValue] = useState(value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    if (maxLength && value?.length > maxLength) {
-      value = value.slice(0, maxLength); // Обрезать текст, если он превышает maxLength
+    let inputValue = e.target.value;
+  
+    // Очищаем ввод от всех нечисловых символов, если isNumber установлен в true
+    if (isNumber) {
+      inputValue = inputValue.replace(/[^\d]/g, '');
     }
-    onChange(value);
+  
+    if (maxLength && inputValue.length > maxLength) {
+      inputValue = inputValue.slice(0, maxLength); // Обрезать текст, если он превышает maxLength
+    }
+  
+    setInputValue(inputValue);
+    onChange(inputValue); 
   };
 
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+  
+
   return (
-    <Stack direction={'column'} spacing={'8px'} sx={{ mt: mt || '0px', width: width || '100%' }}>
+    <Stack direction={'column'} sx={{ mt: mt || '0px', width: width || '100%' }}>
       {title && (
-        <InputLabel sx={{ ...bodyS, fontWeight: titleFontWeight, color: 'black' }}>{title}</InputLabel>
+        <InputLabel sx={{ ...bodyM, fontWeight: titleFontWeight, color: 'black' }}>{title}</InputLabel>
       )}
       <StyledCustomTextField
-        value={value ?? ''}
-        onChange={handleInputChange}
-        placeholder={placeholder}
+        value={inputValue}
+        variant="standard"
         disabled={disabled}
+        placeholder={placeholder}
+        name="custom-field"
+        id="custom-field"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
         InputProps={{
-          endAdornment: isSearch && <LogoSearch />,
+          disableUnderline: true,
+          autoComplete: 'off',
+          endAdornment: isNumber ? <TengeLogo /> : null,
         }}
       />
       {showWarning && <InputLabel sx={{ fontWeight: 400, color: 'red' }}>{'error message'}</InputLabel>}

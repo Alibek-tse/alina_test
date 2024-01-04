@@ -1,7 +1,5 @@
-import { useTheme } from '@mui/material/styles';
 
 export const useThemeColors = () => {
-  const theme = useTheme();
 
   // Определение констант для цветов
   const mainBackground = '#E9F5FF';

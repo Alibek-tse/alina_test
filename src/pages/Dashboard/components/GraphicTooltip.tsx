@@ -5,7 +5,7 @@ import {
   TooltipProps,
 } from 'recharts';
 
-export const GraphicTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+export const GraphicTooltip = ({ active, payload }: TooltipProps<number, string>) => {
     const { bodyS } = useThemeFonts();
     const { white, darkBlue, red, green } = useThemeColors();
     if (active && payload && payload.length) {
@@ -15,12 +15,12 @@ export const GraphicTooltip = ({ active, payload, label }: TooltipProps<number, 
           <Stack direction={'row'} spacing={2}>
             <Stack direction={'column'}>
               <Typography sx={{ ...bodyS, color: green }}>покупка</Typography>
-              <Typography sx={{ ...bodyS, color: white }}>{`${payload[0].value}`}</Typography>
+              <Typography sx={{ ...bodyS, color: white }}>{`${payload[0].value}₸`}</Typography>
             </Stack>
             <Typography sx={{ ...bodyS, color: white }}>$</Typography>
             <Stack direction={'column'}>
               <Typography sx={{ ...bodyS, color: red }}>продажа</Typography>
-              <Typography sx={{ ...bodyS, color: white }}>{`${payload[1].value}`}</Typography>
+              <Typography sx={{ ...bodyS, color: white }}>{`${payload[1].value}₸`}</Typography>
             </Stack>
           </Stack>
         </Stack>

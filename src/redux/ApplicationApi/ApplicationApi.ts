@@ -1,6 +1,6 @@
 import { MoneyType } from '@/types/MoneyType';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { instanceToPlain, plainToClass } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 
 const HOST = process.env.REACT_APP_HOST;
 
