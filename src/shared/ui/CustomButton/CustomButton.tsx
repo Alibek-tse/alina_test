@@ -10,7 +10,7 @@ interface CustomButtonProps extends ButtonProps {
 
 export const CustomButton: React.FC<CustomButtonProps> = ({ onClick, title, variant, ...props }) => {
   const { bodyM } = useThemeFonts();
-  const { darkBlue, white } = useThemeColors();
+  const { darkBlue, white, mainBackground } = useThemeColors();
 
   return (
     <Button
@@ -21,6 +21,9 @@ export const CustomButton: React.FC<CustomButtonProps> = ({ onClick, title, vari
         borderRadius: '8px',
         border: variant === 'contained' ? 'none' : '2px solid #969696',
         color: variant === 'contained' ? white : '#969696',
+        '&:hover': {
+          backgroundColor: variant === 'contained' ? '#1A3A7A' : '#F0F0F0',
+        },
       }}
       onClick={onClick}
       {...props}

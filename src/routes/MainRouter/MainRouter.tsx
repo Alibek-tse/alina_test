@@ -11,6 +11,7 @@ export const MainRouter = () => {
         <Route index element={<Dashboard />} />
         <Route path="/application" element={<Application />} />
         <Route path="/application-create" element={<ApplicationForm />} />
+        <Route path="/application-edit/:docId" element={<ApplicationForm isEdit/>} />
       </Route>
     </Routes>
   );
