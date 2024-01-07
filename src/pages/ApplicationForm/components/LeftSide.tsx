@@ -2,24 +2,19 @@ import { useThemeFonts } from '@/hooks/useThemeFonts';
 import { RootState } from '@/redux';
 import { setApplicationForm } from '@/redux/ApplicationSlice';
 import CustomCheckbox from '@/shared/ui/CustomCheckbox';
-import CustomCounter from '@/shared/ui/CustomCounter';
-import CustomDatePicker from '@/shared/ui/CustomDatePicker';
 import CustomRadioGroup from '@/shared/ui/CustomRadioGroup';
 import CustomSelect from '@/shared/ui/CustomSelect';
 import CustomTextField from '@/shared/ui/CustomTextField';
-import MainContainer from '@/shared/ui/MainContainer';
 import { ApplicationFormType } from '@/types/ApplicationFormType';
 import { Box, InputLabel, Stack } from '@mui/material';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export const LeftSide = () => {
+export const LeftSide = ({showWarning}: {showWarning: boolean}) => {
   const applicationForm: ApplicationFormType = useSelector(
     (state: RootState) => state.applicationSlice.applicationFormState
   );
   const dispatch = useDispatch();
   const { bodyM } = useThemeFonts();
-  const [count, setCount] = useState(1);
 
   const optionsTypeApplication = [
     { value: 'classic', name: 'Класический' },
@@ -34,6 +29,7 @@ export const LeftSide = () => {
           dispatch(setApplicationForm(new ApplicationFormType({ ...applicationForm, name: value })))
         }
         title="Название заявки*"
+        showWarning={showWarning}
       />
       <Stack
         direction={'row'}
@@ -62,6 +58,7 @@ export const LeftSide = () => {
             }
             value={applicationForm?.applicationType}
             applicationType
+            showWarning={showWarning}
           />
         </Box>
       </Stack>

@@ -1,18 +1,15 @@
 import { RootState } from '@/redux';
 import { setApplicationForm } from '@/redux/ApplicationSlice';
-import CustomCheckbox from '@/shared/ui/CustomCheckbox';
 import CustomCounter from '@/shared/ui/CustomCounter';
 import CustomDatePicker from '@/shared/ui/CustomDatePicker';
-import CustomRadioGroup from '@/shared/ui/CustomRadioGroup';
 import CustomSelect from '@/shared/ui/CustomSelect';
 import CustomTextField from '@/shared/ui/CustomTextField';
-import MainContainer from '@/shared/ui/MainContainer';
+import TextFieldMask from '@/shared/ui/TextFieldMask';
 import { ApplicationFormType } from '@/types/ApplicationFormType';
 import { Box, Stack } from '@mui/material';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export const RightSide = () => {
+export const RightSide = ({showWarning}: {showWarning: boolean}) => {
   const applicationForm: ApplicationFormType = useSelector(
     (state: RootState) => state.applicationSlice.applicationFormState
   );
@@ -21,7 +18,7 @@ export const RightSide = () => {
   return (
     <Stack direction={'column'} alignItems={'end'} sx={{ width: '100%' }}>
       <Stack direction={'row'} spacing={5}>
-        <Stack direction={'column'} spacing={'26px'}>
+        <Stack direction={'column'} spacing={'27px'}>
           <CustomCounter
             count={applicationForm?.applicantsNumber}
             incrementCount={() =>
@@ -71,14 +68,16 @@ export const RightSide = () => {
 
         <Stack direction={'column'} spacing={4}>
           <Box sx={{ pl: 3 }}>
-            <CustomTextField
+            <TextFieldMask
               value={applicationForm?.number}
               onChange={value =>
                 dispatch(setApplicationForm(new ApplicationFormType({ ...applicationForm, number: value })))
               }
               title="Номер телефона*"
-              placeholder="+7 (777) 777-77-77"
+              mask="+7 999 999-99-99"
+              placeholder='+ 7 (___) ___-__-__'
               width="50%"
+              showWarning={showWarning}
             />
           </Box>
           <CustomDatePicker

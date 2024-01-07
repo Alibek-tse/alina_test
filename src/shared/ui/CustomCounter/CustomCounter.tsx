@@ -21,7 +21,7 @@ export const CustomCounter: React.FC<CustomCounterType> = ({ count, incrementCou
   return (
     <Stack direction={'column'}>
       <InputLabel sx={{ ...bodyM, fontWeight: 400, color: 'black' }}>Количество заявителей</InputLabel>
-      <Stack direction={'row'} spacing={1} alignItems={'end'} sx={{ height: '42px' }}>
+      <Stack direction={'row'} spacing={1} alignItems={'end'} sx={{ height: '32px' }}>
         <StyledTextField
           variant="standard"
           value={count}

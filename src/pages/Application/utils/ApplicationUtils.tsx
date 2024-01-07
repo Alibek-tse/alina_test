@@ -1,92 +1,129 @@
 import { Box, IconButton, Stack } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { ReactComponent as LogoEdit } from '@/assets/icon/edit.svg';
-import { ReactComponent as LogoDelete } from '@/assets/icon/delete.svg';
+import { ReactComponent as LogoEdit } from '@/assets/icon/editIcon.svg';
+import { ReactComponent as LogoDelete } from '@/assets/icon/deleteIcon.svg';
 import styled from '@emotion/styled';
+import { transformDateToString } from '@/helpers/helper';
+import { CityEnum } from '@/enum/CityEnum';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDeleteApplicationMutation } from '@/redux/ApplicationApi/ApplicationApi';
 
-export const columns: GridColDef[] = [
-  {
-    field: 'id',
-    headerName: 'ID',
-    width: 10,
-    sortable: false,
-    renderCell: (params: GridRenderCellParams) => <Box component={'span'}>{params.row?.id}</Box>,
-  },
+export const useApplicationColumns = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [deleteApplication] = useDeleteApplicationMutation()
 
-//   {
-//     field: 'templateCode',
-//     headerName: 'Код шаблона',
-//     flex: 1,
-//     sortable: false,
-//     renderCell: (params: GridRenderCellParams) => {
-//       return <Box component={'span'}>{params.row?.code ?? '-'}</Box>;
-//     },
-//   },
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 10,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => <Box component={'span'}>{params.row?.id}</Box>,
+    },
 
-//   {
-//     field: 'templateName',
-//     headerName: 'Имя шаблона',
-//     flex: 1,
-//     sortable: false,
-//     renderCell: (params: GridRenderCellParams) => {
-//       return <Box component={'span'}>{params.row?.name ?? '-'}</Box>;
-//     },
-//   },
+    {
+      field: 'name',
+      headerName: 'ФИО',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        return <Box component={'span'}>{params.row?.name ?? '-'}</Box>;
+      },
+    },
 
-//   {
-//     field: 'status',
-//     headerName: 'Статус',
-//     flex: 1,
-//     sortable: false,
-//     renderCell: (params: GridRenderCellParams) => {
-//       const status = params.row?.status ? 'Активный' : 'Не активный'
-//       return <Box component={'span'}>{status?? '-'}</Box>;
-//     },
-//   },
+    {
+      field: 'number',
+      headerName: 'Номер телефона',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        return <Box component={'span'}>{params.row?.number ?? '-'}</Box>;
+      },
+    },
 
-//   {
-//     field: 'edit',
-//     headerName: 'Действие',
-//     sortable: false,
-//     width: 84,
-//     align: 'right',
-//     renderCell: (params: GridRenderCellParams) => {
-//       return (
-//         <Stack
-//           direction={'row'}
-//           justifyContent={'center'}
-//           alignItems={'center'}
-//           sx={{ width: '100%'}}
-//         >
-//           <IconButton>
-//             <LogoEdit />
-//           </IconButton>
-//         </Stack>
-//       );
-//     },
-//   },
-//   {
-//     field: 'delete',
-//     headerName: 'Действие',
-//     sortable: false,
-//     width: 84,
-//     align: 'right',
-//     renderCell: (params: GridRenderCellParams) => {
-//       return (
-//         <Stack
-//           direction={'row'}
-//           justifyContent={'center'}
-//           alignItems={'center'}
-//           sx={{ width: '100%'}}
-//         >
-//           <IconButton>
-//             <LogoDelete />
-//           </IconButton>
-//         </Stack>
-//       );
-//     },
-//   },
-];
+    {
+      field: 'type',
+      headerName: 'Статус',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const type = params.row?.applicationType === 'classic' ? 'Класический' : 'Стандартный';
+        return <Box component={'span'}>{type ?? '-'}</Box>;
+      },
+    },
+
+    {
+      field: 'date',
+      headerName: 'Дата',
+      sortable: false,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        const date = transformDateToString(params.row?.date);
+        return <Box component={'span'}>{date ?? '-'}</Box>;
+      },
+    },
+    {
+      field: 'count',
+      headerName: 'Кол-во',
+      sortable: false,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        return <Box component={'span'}>{params.row?.applicantsNumber ?? '-'}</Box>;
+      },
+    },
+    {
+      field: 'city',
+      headerName: 'Город',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        return <Box component={'span'}>{CityEnum[params.row?.city as keyof typeof CityEnum] ?? '-'}</Box>;
+      },
+    },
+    {
+      field: 'call',
+      headerName: 'Звонок',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const isCall = params.row?.isCall === 'Yes' ? 'Да' : 'Нет';
+        return <Box component={'span'}>{isCall ?? '-'}</Box>;
+      },
+    },
+    {
+      field: 'edit',
+      headerName: '',
+      sortable: false,
+      width: 50,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} sx={{ width: '100%' }}>
+            <IconButton onClick={() => navigate(`${location.pathname}-edit/${params.row?.id}`)}>
+              <LogoEdit />
+            </IconButton>
+          </Stack>
+        );
+      },
+    },
+    {
+      field: 'delete',
+      headerName: '',
+      sortable: false,
+      width: 50,
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} sx={{ width: '100%' }}>
+            <IconButton onClick={() => deleteApplication({id: params.row?.id})}>
+              <LogoDelete />
+            </IconButton>
+          </Stack>
+        );
+      },
+    },
+  ];
+  return columns;
+};
 
 export const DataGridStyle = styled(DataGrid)(({ theme }) => ({
   // Сброс бордеров по умолчанию
@@ -98,57 +135,20 @@ export const DataGridStyle = styled(DataGrid)(({ theme }) => ({
   // Стили для шапки таблицы
   '& .MuiDataGrid-columnHeaders': {
     backgroundColor: 'white', // Голубой фон шапки
-    // borderRight: '1px solid #ccc',
-    // borderLeft: '1px solid #ccc',
-    // borderTop: '1px solid #ccc',
     borderRadius: '0px',
-    '.MuiDataGrid-columnHeader:first-of-type': {
-    //   borderLeft: '1px solid #ccc', // Убираем бордер с последнего заголовка
-    },
-    '.MuiDataGrid-columnHeader:last-child': {
-    //   borderLeft: 'none', // Убираем бордер с последнего заголовка
-    },
-
-    '.MuiDataGrid-columnHeader': {
+  },
+  '.MuiDataGrid-columnHeader': {
     //   borderRight: '1px solid #ccc', // Добавляем вертикальный бордер справа для каждого заголовка
-    },
+    color: '#233D82',
   },
-  '.MuiDataGrid-columnHeader:last-child': {
-    // border: '1px solid #ccc', // Убираем бордер с последнего заголовка
-  },
-
   // Убираем дефолтные разделители MUI
   '& .MuiDataGrid-columnSeparator': {
     display: 'none',
   },
-
-  // Стили для ячеек шапки
-  // '& .MuiDataGrid-columnHeaderTitle': {
-  //   fontWeight: 'bold', // Жирный текст в шапке
-  // },
-
-  // Стили для строк
-  '& .MuiDataGrid-row': {
-    // Чередование фона строк
-    // '&:nth-of-type(2n)': {
-    //   backgroundColor: '#f7f7f7', // Серый фон для четных строк
-    // },
-    // Границы для ячеек в строке
-    '& .MuiDataGrid-cell': {
-    //   borderRight: '1px solid #ccc', // Граница справа ячеек
-    },
-  },
-
-  // Убираем бордер с последней ячейки, чтобы избежать двойной границы
-  '& .MuiDataGrid-row .MuiDataGrid-cell:first-of-type': {
-    // borderLeft: '1px solid #ccc',
-  },
-
   // Границы вокруг всего DataGrid
   '& .MuiDataGrid-root': {
     border: '1px solid #ccc',
   },
-
   // Стили для футера, если он есть
   '& .MuiDataGrid-footerContainer': {
     border: 'none', // Граница сверху футера
@@ -156,10 +156,4 @@ export const DataGridStyle = styled(DataGrid)(({ theme }) => ({
   '.MuiDataGrid-row:hover': {
     backgroundColor: '#eaebeb', // замените на желаемый цвет при наведении
   },
-  // стиль для фиксированной высоты таблицы
-  // height: containerHeight,
-  // '& .MuiDataGrid-renderingZone': {
-  //   maxHeight: `${containerHeight}px !important`,
-  // },
-  // ... Дополнительные стили, если нужно
 }));

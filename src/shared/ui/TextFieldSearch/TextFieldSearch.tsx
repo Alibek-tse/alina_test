@@ -1,30 +1,9 @@
 import { TextField, Stack, InputLabel } from '@mui/material';
 import styled from '@emotion/styled';
 import { useThemeFonts } from '@/hooks/useThemeFonts';
-import { ReactComponent as TengeLogo } from '@/assets/icon/iconTenge.svg';
+import { ReactComponent as SearchLogo } from '@/assets/icon/searchLogo.svg';
 import { useEffect, useState } from 'react';
-
-const StyledCustomTextField = styled(TextField)(({ theme }) => ({
-  '& .MuiInputBase-input': {
-    height: '20px',
-    borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
-    position: 'relative',
-    bottom: '-1px',
-    fontSize: '16px',
-    lineHeight: '24px',
-    fontWeight: 400,
-    paddingLeft: '0',
-    paddingRight: '0',
-    '&.Mui-disabled': {
-      paddingRight: '0',
-    },
-  },
-  '& .MuiInputBase-input::placeholder': {
-    fontSize: '16px',
-    lineHeight: '18px',
-    color: '#969696',
-  },
-}));
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 type CustomTextFieldProps = {
   title?: string;
@@ -43,7 +22,32 @@ type CustomTextFieldProps = {
   mask?: string;
 };
 
-export const CustomTextField: React.FC<CustomTextFieldProps> = ({
+const StyledCustomTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-root': {
+    borderRadius: '15px',
+    backgroundColor: '#E9F5FF',
+    border: '1px solid #2B2B2B',
+  },
+  '& .MuiInputBase-input': {
+    fontSize: '16px',
+    lineHeight: '24px',
+    fontWeight: 400,
+    paddingLeft: '0',
+    paddingRight: '0',
+    borderRadius: '15px',
+    padding: '12px',
+    '&.Mui-disabled': {
+      paddingRight: '0',
+    },
+  },
+  '& .MuiInputBase-input::placeholder': {
+    fontSize: '16px',
+    lineHeight: '18px',
+    color: '#969696',
+  },
+}));
+
+export const TextFieldSearch: React.FC<CustomTextFieldProps> = ({
   value,
   onChange,
   title,
@@ -57,7 +61,8 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
   isNumber = false,
   isSearch = false,
 }) => {
-  const { bodyM, notes } = useThemeFonts();
+  const { mainBackground, white } = useThemeColors();
+  const { bodyM } = useThemeFonts();
   const [inputValue, setInputValue] = useState(value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,23 +92,16 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
       )}
       <StyledCustomTextField
         value={inputValue}
-        variant={isSearch ? 'outlined' : 'standard'}
         disabled={disabled}
         placeholder={placeholder}
         name="custom-field"
         id="custom-field"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
         InputProps={{
-          disableUnderline: true,
-          autoComplete: 'off',
-          endAdornment: isNumber ? <TengeLogo /> : null,
+          endAdornment: <SearchLogo />,
         }}
       />
-      {showWarning && (
-        <InputLabel sx={{ ...notes, fontWeight: 400, color: 'red', pt: '2px' }}>
-          {'обязательное поле'}
-        </InputLabel>
-      )}
+      {showWarning && <InputLabel sx={{ fontWeight: 400, color: 'red' }}>{'error message'}</InputLabel>}
     </Stack>
   );
 };

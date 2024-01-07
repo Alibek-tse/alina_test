@@ -10,7 +10,7 @@ export const ApplicationApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: HOST,
   }),
-  tagTypes: ['TemplateTable'],
+  tagTypes: ['ApplicationTable'],
   endpoints: build => ({
     getMoney: build.query<MoneyType, string | null>({
       query: currency => `/${currency || 'dollar'}`,
@@ -28,7 +28,7 @@ export const ApplicationApi = createApi({
           },
         };
       },
-      // invalidatesTags: ['TemplateTable'],
+      invalidatesTags: ['ApplicationTable'],
     }),
     getApplication: build.query<ApplicationFormType, { id: number }>({
       query: params => {
@@ -41,28 +41,36 @@ export const ApplicationApi = createApi({
       transformResponse: (response: ApplicationFormType) => {
         return plainToClass(ApplicationFormType, response);
       },
-      // providesTags: ['AccidentItem'],
     }),
     editApplication: build.mutation<any, { id: number; body: ApplicationFormType }>({
       query: ({ id, body }) => {
         const requestBody = JSON.stringify(instanceToPlain(body));
         return {
-          url: `/applications/${id}`, // добавляем id в URL
-          method: 'PUT', // изменяем метод на PUT
+          url: `/applications/${id}`, 
+          method: 'PUT', 
           body: requestBody,
           headers: {
             'Content-Type': 'application/json',
           },
         };
       },
-      // invalidatesTags: ['TemplateTable'], если это требуется
+      invalidatesTags: ['ApplicationTable'],
     }),
     getApplications: build.query<ApplicationFormType[], void>({
       query: () => '/applications',
       transformResponse: (response: ApplicationFormType[]) => {
         return response.map(app => plainToClass(ApplicationFormType, app));
       },
-      // providesTags: ['AccidentItem'],
+      providesTags: ['ApplicationTable'],
+    }),
+    deleteApplication: build.mutation<any, { id: number}>({
+      query: ({ id }) => {
+        return {
+          url: `/applications/${id}`, 
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['ApplicationTable']
     }),
   }),
 });
@@ -72,5 +80,6 @@ export const {
   useCreateApplicationsMutation,
   useGetApplicationQuery,
   useEditApplicationMutation,
-  useGetApplicationsQuery
+  useGetApplicationsQuery,
+  useDeleteApplicationMutation
 } = ApplicationApi;

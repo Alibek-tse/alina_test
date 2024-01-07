@@ -27,7 +27,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   options = [],
   applicationType = false,
 }) => {
-  const { bodyM } = useThemeFonts();
+  const { bodyM, notes } = useThemeFonts();
 
   return (
     <Stack direction="column" sx={{ mt: mt || '0px' }}>
@@ -44,7 +44,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           boxShadow: 'none',
           '& .MuiSelect-select': {
             position: 'relative',
-            paddingRight: applicationType ? '32px' : '12px',
+            padding: '11px 0px',
+            // paddingRight: applicationType ? '32px' : '12px',
             '&::after': {
               content: '""',
               position: 'absolute',
@@ -56,7 +57,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           },
           '& .MuiOutlinedInput-notchedOutline': {
             border: 'none',
-            borderRadius: '0px'
+            borderRadius: '0px',
           },
           '& .MuiSelect-icon': {
             color: 'black',
@@ -71,9 +72,9 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           </MenuItem>
         ))}
       </Select>
-      {/* {showWarning && !inputValue && (
-        <InputLabel sx={{ ...labelM, fontWeight: 400, color: errorMain }}>{'Выберите значения'}</InputLabel>
-      )} */}
+      {showWarning && (
+        <InputLabel sx={{ ...notes, fontWeight: 400, color: 'red' }}>{'обязательное поле'}</InputLabel>
+      )}
     </Stack>
   );
 };

@@ -12,6 +12,7 @@ import { CustomBarChartRadial } from './components/CustomBarChartRadial';
 
 const options = [
   { value: 'dollar', name: 'Доллар' },
+  { value: 'euro', name: 'Евро' },
   { value: 'dinar', name: 'Динар' },
 ];
 

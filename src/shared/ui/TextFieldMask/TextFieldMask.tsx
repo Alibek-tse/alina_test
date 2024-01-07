@@ -1,9 +1,11 @@
-import { TextField, Stack, InputLabel } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, InputLabel, Stack } from '@mui/material';
 import styled from '@emotion/styled';
-import { useThemeFonts } from '@/hooks/useThemeFonts';
-import { ReactComponent as TengeLogo } from '@/assets/icon/iconTenge.svg';
-import { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
+import { useThemeFonts } from '@/hooks/useThemeFonts'; // Убедитесь, что этот хук существует
+import { ReactComponent as TengeLogo } from '@/assets/icon/iconTenge.svg'; // Замените на свой компонент иконки, если необходимо
 
+// Стилизация TextField
 const StyledCustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-input': {
     height: '20px',
@@ -30,7 +32,6 @@ type CustomTextFieldProps = {
   title?: string;
   mt?: string;
   width?: string;
-  //eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   value: string | null;
   placeholder?: string;
@@ -43,7 +44,12 @@ type CustomTextFieldProps = {
   mask?: string;
 };
 
-export const CustomTextField: React.FC<CustomTextFieldProps> = ({
+const MaskedInput = (props: any) => {
+  const { inputRef, ...other } = props;
+  return <InputMask ref={inputRef} {...other} mask={props.mask} />;
+};
+
+export const TextFieldMask: React.FC<CustomTextFieldProps> = ({
   value,
   onChange,
   title,
@@ -56,20 +62,20 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
   maxLength = null,
   isNumber = false,
   isSearch = false,
+  mask = '',
 }) => {
   const { bodyM, notes } = useThemeFonts();
-  const [inputValue, setInputValue] = useState(value);
+  const [inputValue, setInputValue] = useState<string | null>(value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
 
-    // Очищаем ввод от всех нечисловых символов, если isNumber установлен в true
     if (isNumber) {
       inputValue = inputValue.replace(/[^\d]/g, '');
     }
 
     if (maxLength && inputValue.length > maxLength) {
-      inputValue = inputValue.slice(0, maxLength); // Обрезать текст, если он превышает maxLength
+      inputValue = inputValue.slice(0, maxLength);
     }
 
     setInputValue(inputValue);
@@ -86,17 +92,18 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
         <InputLabel sx={{ ...bodyM, fontWeight: titleFontWeight, color: 'black' }}>{title}</InputLabel>
       )}
       <StyledCustomTextField
+        variant={'standard'}
         value={inputValue}
-        variant={isSearch ? 'outlined' : 'standard'}
-        disabled={disabled}
         placeholder={placeholder}
-        name="custom-field"
-        id="custom-field"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+        onChange={handleInputChange}
+        error={showWarning}
         InputProps={{
+          inputComponent: mask ? MaskedInput : undefined, // Применяем маску, если она есть
+          inputProps: {
+            mask: mask,
+          },
           disableUnderline: true,
           autoComplete: 'off',
-          endAdornment: isNumber ? <TengeLogo /> : null,
         }}
       />
       {showWarning && (
